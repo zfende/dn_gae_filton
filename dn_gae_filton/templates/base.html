@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block naslov %}{% endblock %} | Filton Hotel</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+    <h1>Filton Hotel, Las Vegas</h1>
+    <p>
+    <h3><strong>Dobrodošli v Filton Hotel!</strong></h3>
+    </p>
+
+    <a href="/">
+        <p><button type="submit">Naslovna stran</button></p>
+    </a>
+    <a href="/vsa-sporocila">
+        <p><button type="submit">Izpis Knjige gostov</button>
+    </a>
+
+    {% block vsebina %}
+    {% endblock %}
+
+</body>
+</html>

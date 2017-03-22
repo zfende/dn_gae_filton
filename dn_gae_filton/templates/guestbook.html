@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block naslov %}Knjiga gostov{% endblock %}
+
+{% block vsebina %}
+<h3><strong>Knjiga gostov</strong></h3>
+
+<form method="post" action="/shrani">
+    <p><strong>Oddajte sporočilo v knjigo gostov:</strong></p>
+
+    <p><strong>Ime in priimek: </strong><input name="ime" placeholder="Vnesite vaš ime in priimek"></p>
+
+    <p><strong>Vaš elektronski naslov: </strong><input name="email" placeholder="Vnesite vaš email naslov"></p>
+
+    <p><textarea name="sporocilo" rows="5" cols="50" placeholder="Vnesite vaše sporočilo" required></textarea></p>
+
+    <button type="submit">Pošlji</button>
+</form>
+
+{% endblock %}
