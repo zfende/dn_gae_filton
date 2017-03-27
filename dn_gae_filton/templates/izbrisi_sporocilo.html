@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block naslov %}Izbrisi uporabnika{% endblock %}
+
+{% block vsebina %}
+
+<h3>Ali res želite izbrisati uporabnika {{ sporocilo.ime }}?</h3>
+<p>
+    <form method="post" action="/posamezno-sporocilo/{{ sporocilo.key.id() }}/izbrisi">
+        <button type="submit">Da</button>
+    </form>
+</p>
+<p>
+    <a href="/vsa-sporocila">
+        <button>Ne</button>
+    </a>
+</p>
+{% endblock %}

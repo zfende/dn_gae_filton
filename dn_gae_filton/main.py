@@ -3,10 +3,10 @@ import os
 import jinja2
 import webapp2
 from models import Sporocilo
+import cgi
 
 template_dir = os.path.join(os.path.dirname(__file__), "templates")
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir), autoescape=False)
-
 
 class BaseHandler(webapp2.RequestHandler):
 
@@ -33,21 +33,21 @@ class MainHandler(BaseHandler):
 
 class ShraniHandler(BaseHandler):
     def post(self):
-        ime = self.request.get("ime")
-        email = self.request.get("email")
-        sporocilo = self.request.get("sporocilo")
+        ime = cgi.escape(self.request.get("ime"))
+        email = cgi.escape(self.request.get("email"))
+        sporocilo = cgi.escape(self.request.get("sporocilo"))
 
         if not ime:
             ime = "Neznan"
         if not email:
             email = "Ni mail-a"
-        if "<script>" in sporocilo:
-            return self.write("Ni ti uspelo!!")
 
         # Shrani sporocilo v bazo.
         spr = Sporocilo(ime=ime, email=email, sporocilo=sporocilo)
         spr.put()
-        return self.write("Uspesno shranjeno v Knjigo gostov.")
+        self.response.write("<p>Uspesno shranjeno v Knjigo gostov!</p>")
+        self.response.write('<a href="/">Nazaj</a>')
+
 
 class VsaSporocilaHandler(BaseHandler):
     def get(self):
@@ -57,9 +57,49 @@ class VsaSporocilaHandler(BaseHandler):
         }
         return self.render_template("seznam.html", spremenljivke)
 
+class PosameznoSporociloHandler(BaseHandler):
+    def get(self, sporocilo_id):
+        sporocilo = Sporocilo.get_by_id(int(sporocilo_id))
+        spremenljivke = {
+            "sporocilo": sporocilo
+        }
+        return self.render_template("posamezno_sporocilo.html", spremenljivke)
+
+class UrediSporociloHandler(BaseHandler):
+    def get(self, sporocilo_id):
+        sporocilo = Sporocilo.get_by_id(int(sporocilo_id))
+        spremenljivke = {
+            "sporocilo": sporocilo
+        }
+        return self.render_template("uredi_sporocilo.html", spremenljivke)
+
+    def post(self, sporocilo_id):
+        sporocilo = Sporocilo.get_by_id(int(sporocilo_id))
+        sporocilo.ime = cgi.escape(self.request.get("ime"))
+        sporocilo.email = cgi.escape(self.request.get("email"))
+        sporocilo.sporocilo = cgi.escape(self.request.get("sporocilo"))
+        sporocilo.put()
+        return self.redirect("/vsa-sporocila")
+
+class IzbrisiSporociloHandler(BaseHandler):
+    def get(self, sporocilo_id):
+        sporocilo = Sporocilo.get_by_id(int(sporocilo_id))
+        spremenljivke = {
+            "sporocilo": sporocilo
+        }
+        return self.render_template("izbrisi_sporocilo.html", spremenljivke)
+
+    def post(self, sporocilo_id):
+        sporocilo = Sporocilo.get_by_id(int(sporocilo_id))
+        sporocilo.key.delete()
+        self.redirect("/vsa-sporocila")
+
 
 app = webapp2.WSGIApplication([
     webapp2.Route('/', MainHandler),
     webapp2.Route('/shrani', ShraniHandler),
     webapp2.Route('/vsa-sporocila', VsaSporocilaHandler),
+    webapp2.Route('/posamezno-sporocilo/<sporocilo_id:\d+>', PosameznoSporociloHandler),
+    webapp2.Route('/posamezno-sporocilo/<sporocilo_id:\d+>/uredi', UrediSporociloHandler),
+    webapp2.Route('/posamezno-sporocilo/<sporocilo_id:\d+>/izbrisi', IzbrisiSporociloHandler),
 ], debug=True)

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block naslov %}Izpis uporabnika{% endblock %}
+
+{% block vsebina %}
+
+<h3>Profil: {{ sporocilo.ime }} </h3>
+<h4>Kaj želite storiti?</h4>
+<p>
+    <a href="/posamezno-sporocilo/{{ sporocilo.key.id() }}/uredi">
+        <button>Uredi</button>
+    </a>
+</p>
+
+<p>
+    <a href="/posamezno-sporocilo/{{ sporocilo.key.id() }}/izbrisi">
+        <button>Izbriši</button>
+    </a>
+</p>
+
+{% endblock %}

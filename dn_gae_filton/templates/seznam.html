@@ -6,6 +6,7 @@
 <h3>Izpis Knjige gostov</h3>
     {% for sporocilo in sporocila %}
     <p>
+        <a href="/posamezno-sporocilo/{{ sporocilo.key.id() }}">Urejanje stika:</a>
         <strong>Datum nastanka sporočila: </strong>({{ sporocilo.nastanek.strftime('%d-%m-%Y %H:%M:%S') }}) -
         <strong>Ime in Priimek: </strong>{{ sporocilo.ime }},
         <strong>Email: </strong>{{ sporocilo.email }},

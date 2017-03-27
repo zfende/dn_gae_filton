@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block naslov %}Uredi uporabnika{% endblock %}
+
+{% block vsebina %}
+
+<h3>Urejanje Sporocila!</h3>
+<form method="post" action="/posamezno-sporocilo/{{ sporocilo.key.id() }}/uredi">
+    <p>Ime in priimek: <input name="ime" value="{{ sporocilo.ime }}"></p>
+    <p>Vaš elektronski naslov: <input name="email" value="{{ sporocilo.email }}"></p>
+    <p>Sporočilo: <input name="sporocilo" value="{{ sporocilo.sporocilo }}"></p>
+    <button type="submit">Poslji</button>
+</form>
+
+{% endblock %}
