@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block naslov %}Izbrisana sporocila{% endblock %}
+
+{% block vsebina %}
+<h3>Izbrisana sporocila</h3>
+
+{% for sporocilo in sporocila %}
+    <p>
+        <strong>Datum nastanka sporočila: </strong>({{ sporocilo.nastanek.strftime('%d-%m-%Y %H:%M:%S') }}) -
+        <strong>Ime in Priimek: </strong>{{ sporocilo.ime }},
+        <strong>Email: </strong>{{ sporocilo.email }},
+        <strong>Sporocilo: </strong>{{ sporocilo.sporocilo }}
+        <a href="/posamezno-sporocilo/{{sporocilo.key.id()}}/obnovi">
+            <p><button type="submit">Obnovi</button></p>
+        </a>
+        <a href="/posamezno-sporocilo/{{sporocilo.key.id()}}/dokoncno-izbrisi">
+            <p><button type="submit">Dokoncno izbrisi</button></p>
+        </a>
+    </p>
+
+{% else %}
+    <p>Ni sporocil.</p>
+{% endfor %}
+{% endblock %}

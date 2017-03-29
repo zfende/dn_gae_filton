@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block naslov %}Dokoncno izbrisi sporocilo{% endblock %}
+
+{% block vsebina %}
+<h3>Ali res želite dokoncno izbrisati sporocilo uporabnika {{ sporocilo.ime }}?</h3>
+
+<form method="post">
+    <button type="submit">Dokoncno izbrisi sporocilo</button>
+</form>
+{% endblock %}

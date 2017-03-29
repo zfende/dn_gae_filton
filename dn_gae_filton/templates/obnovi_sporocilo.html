@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block naslov %}Obnovi sporocilo{% endblock %}
+
+{% block vsebina %}
+<h3>Ali res želite obnoviti sporocilo uporabnika {{ sporocilo.ime }}?</h3>
+
+<form method="post">
+    <button type="submit">Obnovi sporocilo</button>
+</form>
+{% endblock %}

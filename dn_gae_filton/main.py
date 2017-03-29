@@ -45,13 +45,12 @@ class ShraniHandler(BaseHandler):
         # Shrani sporocilo v bazo.
         spr = Sporocilo(ime=ime, email=email, sporocilo=sporocilo)
         spr.put()
-        self.response.write("<p>Uspesno shranjeno v Knjigo gostov!</p>")
-        self.response.write('<a href="/">Nazaj</a>')
+        return self.render_template("uspesno_shranjeno.html")
 
 
 class VsaSporocilaHandler(BaseHandler):
     def get(self):
-        sporocila = Sporocilo.query().fetch()
+        sporocila = Sporocilo.query(Sporocilo.izbrisan == False).fetch()
         spremenljivke = {
             "sporocila": sporocila
         }
@@ -91,8 +90,44 @@ class IzbrisiSporociloHandler(BaseHandler):
 
     def post(self, sporocilo_id):
         sporocilo = Sporocilo.get_by_id(int(sporocilo_id))
+        sporocilo.izbrisan = True
+        sporocilo.put()
+        return self.redirect("/vsa-sporocila")
+
+class IzbrisanaSporocilaHandler(BaseHandler):
+    def get(self):
+        sporocila = Sporocilo.query(Sporocilo.izbrisan == True).fetch()
+        spremenljivke = {
+            "sporocila": sporocila
+        }
+        return self.render_template("/izbrisana_sporocila.html", spremenljivke)
+
+class ObnoviSporociloHandler(BaseHandler):
+    def get(self, sporocilo_id):
+        sporocilo = Sporocilo.get_by_id(int(sporocilo_id))
+        spremenljivke = {
+            "sporocilo": sporocilo
+        }
+        return self.render_template("/obnovi_sporocilo.html", spremenljivke)
+
+    def post(self, sporocilo_id):
+        sporocilo = Sporocilo.get_by_id(int(sporocilo_id))
+        sporocilo.izbrisan = False
+        sporocilo.put()
+        return self.redirect("/vsa-sporocila")
+
+class DokoncnoIzbrisiHandler(BaseHandler):
+    def get(self, sporocilo_id):
+        sporocilo = Sporocilo.get_by_id(int(sporocilo_id))
+        spremenljivke = {
+            "sporocilo": sporocilo
+        }
+        return self.render_template("/dokoncno_izbrisi.html", spremenljivke)
+
+    def post(self, sporocilo_id):
+        sporocilo = Sporocilo.get_by_id(int(sporocilo_id))
         sporocilo.key.delete()
-        self.redirect("/vsa-sporocila")
+        return self.redirect("/izbrisana-sporocila")
 
 
 app = webapp2.WSGIApplication([
@@ -102,4 +137,7 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/posamezno-sporocilo/<sporocilo_id:\d+>', PosameznoSporociloHandler),
     webapp2.Route('/posamezno-sporocilo/<sporocilo_id:\d+>/uredi', UrediSporociloHandler),
     webapp2.Route('/posamezno-sporocilo/<sporocilo_id:\d+>/izbrisi', IzbrisiSporociloHandler),
+    webapp2.Route('/izbrisana-sporocila', IzbrisanaSporocilaHandler),
+    webapp2.Route('/posamezno-sporocilo/<sporocilo_id:\d+>/obnovi', ObnoviSporociloHandler),
+    webapp2.Route('/posamezno-sporocilo/<sporocilo_id:\d+>/dokoncno-izbrisi', DokoncnoIzbrisiHandler),
 ], debug=True)

@@ -4,7 +4,7 @@
 
 {% block vsebina %}
 
-<h3>Ali res želite izbrisati uporabnika {{ sporocilo.ime }}?</h3>
+<h3>Ali res želite izbrisati sporocilo uporabnika {{ sporocilo.ime }}?</h3>
 <p>
     <form method="post" action="/posamezno-sporocilo/{{ sporocilo.key.id() }}/izbrisi">
         <button type="submit">Da</button>

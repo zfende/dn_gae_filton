@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block naslov %}{% endblock %} | Filton Hotel</title>
+    {% block timeout %}{% endblock %}
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
@@ -15,8 +16,12 @@
         <p><button type="submit">Naslovna stran</button></p>
     </a>
     <a href="/vsa-sporocila">
-        <p><button type="submit">Izpis Knjige gostov</button>
+        <p><button type="submit">Izpis Knjige gostov</button></p>
     </a>
+    <a href="/izbrisana-sporocila">
+        <p><button type="submit">Izbrisana sporocila</button></p>
+    </a>
+
 
     {% block vsebina %}
     {% endblock %}
