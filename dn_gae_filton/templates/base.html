@@ -7,24 +7,35 @@
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
-    <h1>Filton Hotel, Las Vegas</h1>
-    <p>
-    <h3><strong>Dobrodošli v Filton Hotel!</strong></h3>
-    </p>
+    {% if logiran %}
+        <h1>Filton Hotel, Las Vegas</h1>
+        <p>
+        <h3><strong>Dobrodošli v Filton Hotel, {{ user.nickname() }}</strong></h3>
+        </p>
 
-    <a href="/">
-        <p><button type="submit">Naslovna stran</button></p>
-    </a>
-    <a href="/vsa-sporocila">
-        <p><button type="submit">Izpis Knjige gostov</button></p>
-    </a>
-    <a href="/izbrisana-sporocila">
-        <p><button type="submit">Izbrisana sporocila</button></p>
-    </a>
+        <a href="/">
+            <p><button type="submit">Naslovna stran</button></p>
+        </a>
+        <a href="/vsa-sporocila">
+            <p><button type="submit">Izpis Knjige gostov</button></p>
+        </a>
+        <a href="/izbrisana-sporocila">
+            <p><button type="submit">Izbrisana sporocila</button></p>
+        </a>
+        <a href="{{ logout_url }}">
+            <p><button type="submit">Odjavi se</button></p>
+        </a>
 
+        {% block vsebina %}
+        {% endblock %}
 
-    {% block vsebina %}
-    {% endblock %}
+    {% else %}
+        <h1>Filton Hotel, Las Vegas</h1>
+        <h2>Nisi prijavljen</h2>
+        <a href="{{ login_url }}">
+            <p><button type="submit">Prijavi se</button></p>
+        </a>
 
+    {% endif %}
 </body>
 </html>

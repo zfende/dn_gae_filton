@@ -2,8 +2,11 @@
 import os
 import jinja2
 import webapp2
-from models import Sporocilo
 import cgi
+
+from google.appengine.api import users
+from models import Sporocilo
+
 
 template_dir = os.path.join(os.path.dirname(__file__), "templates")
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir), autoescape=False)
@@ -29,24 +32,36 @@ class BaseHandler(webapp2.RequestHandler):
 
 class MainHandler(BaseHandler):
     def get(self):
-        return self.render_template("guestbook.html")
+        user = users.get_current_user()
+        if user:
+            logiran = True
+            logout_url = users.create_logout_url("/")
+            spremenljivke = {
+                "user": user, "logiran": logiran, "logout_url": logout_url,
+            }
+        else:
+            logiran = False
+            login_url = users.create_login_url("/")
+            spremenljivke = {
+                "user": user, "logiran": logiran, "login_url": login_url,
+            }
+        return self.render_template("guestbook.html", spremenljivke)
 
 class ShraniHandler(BaseHandler):
     def post(self):
-        ime = cgi.escape(self.request.get("ime"))
         email = cgi.escape(self.request.get("email"))
         sporocilo = cgi.escape(self.request.get("sporocilo"))
 
-        if not ime:
-            ime = "Neznan"
-        if not email:
-            email = "Ni mail-a"
+        user = users.get_current_user()
+        if user:
+            ime = user.nickname()
 
-        # Shrani sporocilo v bazo.
-        spr = Sporocilo(ime=ime, email=email, sporocilo=sporocilo)
-        spr.put()
-        return self.render_template("uspesno_shranjeno.html")
-
+            # Shrani sporocilo v bazo.
+            spr = Sporocilo(ime=ime, email=email, sporocilo=sporocilo)
+            spr.put()
+            return self.render_template("uspesno_shranjeno.html")
+        else:
+            return self.write("Ni ti uspelo.")
 
 class VsaSporocilaHandler(BaseHandler):
     def get(self):
