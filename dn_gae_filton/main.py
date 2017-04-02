@@ -55,37 +55,53 @@ class ShraniHandler(BaseHandler):
         user = users.get_current_user()
         if user:
             ime = user.nickname()
-
+            logiran = True
+            logout_url = users.create_logout_url("/")
+            spremenljivke = {
+                "sporocilo": sporocilo, "logiran": logiran, "user": user, "logout_url": logout_url,
+            }
             # Shrani sporocilo v bazo.
             spr = Sporocilo(ime=ime, email=email, sporocilo=sporocilo)
             spr.put()
-            return self.render_template("uspesno_shranjeno.html")
+            return self.render_template("uspesno_shranjeno.html", spremenljivke)
         else:
             return self.write("Ni ti uspelo.")
 
 class VsaSporocilaHandler(BaseHandler):
     def get(self):
         sporocila = Sporocilo.query(Sporocilo.izbrisan == False).fetch()
-        spremenljivke = {
-            "sporocila": sporocila
-        }
-        return self.render_template("seznam.html", spremenljivke)
+        user = users.get_current_user()
+        if user:
+            logiran = True
+            logout_url = users.create_logout_url("/")
+            spremenljivke = {
+                "sporocila": sporocila, "logiran": logiran, "user": user, "logout_url": logout_url,
+            }
+            return self.render_template("seznam.html", spremenljivke)
 
 class PosameznoSporociloHandler(BaseHandler):
     def get(self, sporocilo_id):
         sporocilo = Sporocilo.get_by_id(int(sporocilo_id))
-        spremenljivke = {
-            "sporocilo": sporocilo
-        }
-        return self.render_template("posamezno_sporocilo.html", spremenljivke)
+        user = users.get_current_user()
+        if user:
+            logiran = True
+            logout_url = users.create_logout_url("/")
+            spremenljivke = {
+                "sporocilo": sporocilo, "logiran": logiran, "user": user, "logout_url": logout_url,
+            }
+            return self.render_template("posamezno_sporocilo.html", spremenljivke)
 
 class UrediSporociloHandler(BaseHandler):
     def get(self, sporocilo_id):
         sporocilo = Sporocilo.get_by_id(int(sporocilo_id))
-        spremenljivke = {
-            "sporocilo": sporocilo
-        }
-        return self.render_template("uredi_sporocilo.html", spremenljivke)
+        user = users.get_current_user()
+        if user:
+            logiran = True
+            logout_url = users.create_logout_url("/")
+            spremenljivke = {
+                "sporocilo": sporocilo, "logiran": logiran, "user": user, "logout_url": logout_url,
+            }
+            return self.render_template("uredi_sporocilo.html", spremenljivke)
 
     def post(self, sporocilo_id):
         sporocilo = Sporocilo.get_by_id(int(sporocilo_id))
@@ -98,10 +114,14 @@ class UrediSporociloHandler(BaseHandler):
 class IzbrisiSporociloHandler(BaseHandler):
     def get(self, sporocilo_id):
         sporocilo = Sporocilo.get_by_id(int(sporocilo_id))
-        spremenljivke = {
-            "sporocilo": sporocilo
-        }
-        return self.render_template("izbrisi_sporocilo.html", spremenljivke)
+        user = users.get_current_user()
+        if user:
+            logiran = True
+            logout_url = users.create_logout_url("/")
+            spremenljivke = {
+                "sporocilo": sporocilo, "logiran": logiran, "user": user, "logout_url": logout_url,
+            }
+            return self.render_template("izbrisi_sporocilo.html", spremenljivke)
 
     def post(self, sporocilo_id):
         sporocilo = Sporocilo.get_by_id(int(sporocilo_id))
@@ -112,18 +132,26 @@ class IzbrisiSporociloHandler(BaseHandler):
 class IzbrisanaSporocilaHandler(BaseHandler):
     def get(self):
         sporocila = Sporocilo.query(Sporocilo.izbrisan == True).fetch()
-        spremenljivke = {
-            "sporocila": sporocila
-        }
-        return self.render_template("/izbrisana_sporocila.html", spremenljivke)
+        user = users.get_current_user()
+        if user:
+            logiran = True
+            logout_url = users.create_logout_url("/")
+            spremenljivke = {
+                "sporocila": sporocila, "logiran": logiran, "user": user, "logout_url": logout_url,
+            }
+            return self.render_template("/izbrisana_sporocila.html", spremenljivke)
 
 class ObnoviSporociloHandler(BaseHandler):
     def get(self, sporocilo_id):
         sporocilo = Sporocilo.get_by_id(int(sporocilo_id))
-        spremenljivke = {
-            "sporocilo": sporocilo
-        }
-        return self.render_template("/obnovi_sporocilo.html", spremenljivke)
+        user = users.get_current_user()
+        if user:
+            logiran = True
+            logout_url = users.create_logout_url("/")
+            spremenljivke = {
+                "sporocilo": sporocilo, "logiran": logiran, "user": user, "logout_url": logout_url,
+            }
+            return self.render_template("/obnovi_sporocilo.html", spremenljivke)
 
     def post(self, sporocilo_id):
         sporocilo = Sporocilo.get_by_id(int(sporocilo_id))
@@ -134,10 +162,14 @@ class ObnoviSporociloHandler(BaseHandler):
 class DokoncnoIzbrisiHandler(BaseHandler):
     def get(self, sporocilo_id):
         sporocilo = Sporocilo.get_by_id(int(sporocilo_id))
-        spremenljivke = {
-            "sporocilo": sporocilo
-        }
-        return self.render_template("/dokoncno_izbrisi.html", spremenljivke)
+        user = users.get_current_user()
+        if user:
+            logiran = True
+            logout_url = users.create_logout_url("/")
+            spremenljivke = {
+                "sporocilo": sporocilo, "logiran": logiran, "user": user, "logout_url": logout_url,
+            }
+            return self.render_template("/dokoncno_izbrisi.html", spremenljivke)
 
     def post(self, sporocilo_id):
         sporocilo = Sporocilo.get_by_id(int(sporocilo_id))
